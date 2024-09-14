@@ -10,8 +10,10 @@ public class Board : MonoBehaviour
 
     //CheckPositionに追記
 
+    //スコア変更のためのオブジェクト
+    private GameObject scoreText;
 
-    
+
     [SerializeField]
     private Transform emptySprite;//ボード基板用の四角枠格納用
     [SerializeField]
@@ -25,6 +27,7 @@ public class Board : MonoBehaviour
     private void Start()
     {
         CreateBoard();
+        scoreText = GameObject.Find("ScoreText");
     }
     //ボードを作成する関数の作成
     void CreateBoard()
@@ -93,6 +96,8 @@ public class Board : MonoBehaviour
             if (IsComplete(y))
             {
                 ClearRow(y);
+                //スコア加算
+                scoreText.GetComponent<TetrisScore>().score = scoreText.GetComponent<TetrisScore>().score + 100;
                 //
                 ShiftRowsDown(y+1);
                 y--;
