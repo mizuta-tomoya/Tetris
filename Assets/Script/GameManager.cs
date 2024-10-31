@@ -6,15 +6,15 @@ using UnityEngine.SceneManagement;//シーン遷移のライブラリ
 
 public class GameManager : MonoBehaviour
 {
-   //変数の作成
-   
-   
-   Spawner spawner;//スポナー
-   Block activeBlock;//生成されたブロック格納
+    //変数の作成
 
-   [SerializeField]
-   private float dropInterval = 0.25f;//次にブロックが落ちるまでのインターバル時間
-   float nextdropTimer;//次にブロックが落ちるまでの時間
+
+    Spawner spawner;//スポナー
+    Block activeBlock;//生成されたブロック格納
+
+    [SerializeField]
+    private float dropInterval = 0.25f;//次にブロックが落ちるまでのインターバル時間
+    float nextdropTimer;//次にブロックが落ちるまでの時間
 
     //ボードのスクリプトを格納
     Board board;
@@ -30,18 +30,18 @@ public class GameManager : MonoBehaviour
     private GameObject gameOverPanel;
     //ゲームオーバー判定
     bool gameOver;
-    
-    
-    
+
+
+
 
     private void Start()
-   {
+    {
         //スポナーオブジェクトをスポナー変数に格納するコードの記述
         spawner = GameObject.FindObjectOfType<Spawner>();
         //ボードを変数に格納する
         board = GameObject.FindObjectOfType<Board>();
 
-        spawner.transform.position=Rounding.Round(spawner.transform.position);
+        spawner.transform.position = Rounding.Round(spawner.transform.position);
 
         //タイマーの初期設定
         nextKeyDownTimer = Time.time + nextKeyDownInterval;
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
         {
             gameOverPanel.SetActive(false);
         }
-   }
+    }
     private void Update()
     {
 
@@ -97,8 +97,8 @@ public class GameManager : MonoBehaviour
     //ボードの底について時に次のブロックを生成する関数
     void PlayerInput()
     {
-        if (Input.GetKey(KeyCode.D) && (Time.time>nextKeyLeftRightTimer)
-            || Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) && (Time.time > nextKeyLeftRightTimer)
+            || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             activeBlock.MoveRight();//右に動かす
 
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
             }
         }
         else if (Input.GetKey(KeyCode.A) && (Time.time > nextKeyLeftRightTimer)
-            || Input.GetKeyDown(KeyCode.A))
+            || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             activeBlock.MoveLeft();//左に動かす
 
@@ -119,7 +119,8 @@ public class GameManager : MonoBehaviour
                 activeBlock.MoveRight();
             }
         }
-        else if(Input.GetKey(KeyCode.E) && (Time.time > nextKeyRotateTimer))
+        else if (Input.GetKey(KeyCode.E) && (Time.time > nextKeyRotateTimer)
+            || Input.GetKeyDown(KeyCode.Space))
         {
             activeBlock.RotateRight();
             nextKeyRotateTimer = Time.time + nextKeyRotateInterval;
@@ -140,7 +141,7 @@ public class GameManager : MonoBehaviour
             }
         }
         else if (Input.GetKey(KeyCode.S) && (Time.time > nextKeyDownTimer)
-            || (Time.time>nextdropTimer))
+            || (Time.time > nextdropTimer) || Input.GetKey(KeyCode.DownArrow) && (Time.time > nextKeyDownTimer))
         {
             activeBlock.MoveDown();//下に動かす
 
@@ -157,7 +158,7 @@ public class GameManager : MonoBehaviour
                     //底についた時の処理
                     BottomBoard();
                 }
-                
+
             }
         }
 
